@@ -47,9 +47,9 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public String getBotUsername() {
         return "KazhakoottamDatingbot";
     }
-
+    
     @Override
     public String getBotToken() {
-        return "6050477286:AAFMYsYDktUj8SEhq3L9Cx0sqV_Rq0D_jmY";
+        return "6050477286:AAFMYsYDktUj8SEhq3L9Cx0sqV_Rq0D_JmY";
     }
 }
