@@ -1,5 +1,7 @@
 package com.example.ustdate.RequestDTO;
 
+import com.example.ustdate.entity.UserRegistering;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -47,7 +49,12 @@ public class UserRequestDTO {
 		this.genderPref = genderPref;
 	}
 
-	
+	public UserRequestDTO(UserRegistering register) {
+		this.setGender(register.getGender());
+		this.setGenderPref(register.getGenderPref());
+		this.setName(register.getName());
+		this.setPhoneNumber(register.getChatId());
+	}
 	
 	
 }

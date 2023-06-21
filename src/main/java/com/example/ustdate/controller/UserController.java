@@ -15,42 +15,28 @@ import com.example.ustdate.entity.ActiveChat;
 import com.example.ustdate.entity.User;
 import com.example.ustdate.repository.ActiveChatRepository;
 import com.example.ustdate.repository.UserRepository;
+import com.example.ustdate.service.UserService;
 
 @RestController
 @RequestMapping("user")
 public class UserController {
 
 	@Autowired
-	UserRepository userRepo;
-
-	@Autowired
-	ActiveChatRepository activeChatRepository;
-
+	UserService service;
+	
 	@GetMapping
 	public List<User> getAll() {
-		return userRepo.findAll();
+		return service.getAll();
 	}
 
 	@PostMapping
 	public User save(@RequestBody UserRequestDTO user) {
-		User newUser = new User();
-		BeanUtils.copyProperties(user, newUser);
-		newUser = userRepo.save(newUser);
-		ActiveChat chat = new ActiveChat();
-		chat = chat.newChat(newUser.getId());
-		activeChatRepository.save(chat);
-		return newUser;
+		return service.save(user);
 	}
 
 	@PostMapping("/all")
 	public String save(@RequestBody List<User> user) {
-		user = userRepo.saveAll(user);
-		for (User use : user) {
-			ActiveChat chat = new ActiveChat();
-			chat = chat.newChat(use.getId());
-			activeChatRepository.save(chat);
-		}
-		return "saved successfully";
+		return service.save(user);
 	}
 
 }

@@ -1,5 +1,6 @@
 package com.example.ustdate.botConfiguration;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,8 +8,13 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import com.example.ustdate.service.ConnectorService;
+
 public class MyTelegramBot extends TelegramLongPollingBot {
 
+	@Autowired
+	ConnectorService connectorService;
+	
     public static void main(String[] args) {
         MyTelegramBot bot = new MyTelegramBot();
         bot.runBot();
@@ -16,7 +22,6 @@ public class MyTelegramBot extends TelegramLongPollingBot {
 
     private void runBot() {
         try {
-            // Set up the bot
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(this);
             System.out.println("Bot has started successfully.");
@@ -29,9 +34,12 @@ public class MyTelegramBot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String messageText = update.getMessage().getText();
+            String userName = update.getMessage().getFrom().getUserName();
             String chatId = update.getMessage().getChatId().toString();
-
+            
+            connectorService.intermediate(userName,chatId,messageText);
             SendMessage message = new SendMessage();
+            
             message.setChatId(chatId);
             message.setText("You said: " + messageText);
 
