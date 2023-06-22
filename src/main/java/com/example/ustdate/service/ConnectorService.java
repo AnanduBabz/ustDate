@@ -2,6 +2,6 @@ package com.example.ustdate.service;
 
 public interface ConnectorService {
 	
-	public String intermediate(String userName, String chatId, String messageText);
+	public SendMessage intermediate(String userName, String chatId, String messageText);
 
 }
