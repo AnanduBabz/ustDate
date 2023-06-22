@@ -34,9 +34,11 @@ public class ConnectorServiceImpl implements ConnectorService {
 				UserRegistering register = registerRepo.findById(userName).get();
 				if(register.getGender()==null&&register.getStep().equals("first")) {
 					register.setStep("second");
+					registerRepo.save(register);
 					return "Tell me your Gender : M/F?";
 				}else if(register.getGenderPref()==null&&register.getStep().equals("second")) {
 					register.setGender(messageText);
+					register.setStep("third");
 					registerRepo.save(register);
 					return "Tell me your Gender preference : M/F?";
 				}else {
