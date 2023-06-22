@@ -28,6 +28,17 @@ public class UserRegistering {
 	@Column
 	private String genderPref;
 
+	@Column
+	private String step;
+
+	public String getStep() {
+		return step;
+	}
+
+	public void setChatId(String step) {
+		this.step = step;
+	}
+	
 	public String getChatId() {
 		return chatId;
 	}
