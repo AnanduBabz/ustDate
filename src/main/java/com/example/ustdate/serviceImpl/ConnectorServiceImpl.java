@@ -9,6 +9,11 @@ import com.example.ustdate.service.ConnectorService;
 import com.example.ustdate.service.UserService;
 import org.springframework.stereotype.Service;
 
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
+
 @Service
 public class ConnectorServiceImpl implements ConnectorService {
 	
@@ -19,8 +24,15 @@ public class ConnectorServiceImpl implements ConnectorService {
 	UserRegistrationRepository registerRepo;
 
 	@Override
-	public String intermediate(String userName,String chatId,String messageText) {
+	public SendMessage intermediate(String userName,String chatId,String messageText) {
 		Boolean existUser = checkUser(userName);
+		SendMessage message = new SendMessage();
+		ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+		keyboardMarkup.setResizeKeyboard(true);
+		KeyboardRow gender = new KeyboardRow();
+		gender.add(new KeyboardButton("M"));
+		gender.add(new KeyboardButton("F"));
+		gender.add(new KeyboardButton("O"));
 		if(existUser) {
 			//on registration?
 		}else {
@@ -35,21 +47,29 @@ public class ConnectorServiceImpl implements ConnectorService {
 				if(register.getGender()==null&&register.getStep().equals("first")) {
 					register.setStep("second");
 					registerRepo.save(register);
-					return "Tell me your Gender : M/F?";
+					keyboardMarkup.setKeyboard(List.of(gender));
+					message.setReplyMarkup(keyboardMarkup); 		
+					message.setText("Tell me your Gender : M/F?");
+					return message;
 				}else if(register.getGenderPref()==null&&register.getStep().equals("second")) {
 					register.setGender(messageText);
 					register.setStep("third");
 					registerRepo.save(register);
-					return "Tell me your Gender preference : M/F?";
+					keyboardMarkup.setKeyboard(List.of(gender));
+					message.setReplyMarkup(keyboardMarkup); 		
+					message.setText("Tell me your Gender preference : M/F?");
+					return message;
 				}else {
 					register.setGenderPref(messageText);
 					UserRequestDTO req= new UserRequestDTO(register);
 					service.save(req);
 					registerRepo.delete(register);
-					return "you are all set to go dear!!!";
+					message.setText("you are all set to go dear!!!");
+					return message;
 				}
 			}
-			return "Hi Welcome to Kazhakoottam dating , let me know your details and intrest";
+			message.setText("Hi Welcome to Kazhakoottam dating , let me know your details and intrest");
+			return message;
 		}
 		return null;
 	}
