@@ -35,7 +35,7 @@ public class UserRegistering {
 		return step;
 	}
 
-	public void setChatId(String step) {
+	public void setStep(String step) {
 		this.step = step;
 	}
 	
