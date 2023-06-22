@@ -8,6 +8,7 @@ import com.example.ustdate.repository.UserRegistrationRepository;
 import com.example.ustdate.service.ConnectorService;
 import com.example.ustdate.service.UserService;
 
+@Service
 public class ConnectorServiceImpl implements ConnectorService {
 	
 	@Autowired
