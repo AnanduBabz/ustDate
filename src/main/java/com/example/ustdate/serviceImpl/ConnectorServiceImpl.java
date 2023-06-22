@@ -28,12 +28,14 @@ public class ConnectorServiceImpl implements ConnectorService {
 				UserRegistering register = new UserRegistering();
 				register.setName(userName);
 				register.setChatId(chatId);
+				register.setStep("first");
 				registerRepo.save(register);
 			}else {
 				UserRegistering register = registerRepo.findById(userName).get();
-				if(register.getGender()==null) {
+				if(register.getGender()==null&&register.getStep=="first") {
+					register.setStep("second");
 					return "Tell me your Gender : M/F?";
-				}else if(register.getGenderPref()==null) {
+				}else if(register.getGenderPref()==null&&register.getStep=="second") {
 					register.setGender(messageText);
 					registerRepo.save(register);
 					return "Tell me your Gender preference : M/F?";
