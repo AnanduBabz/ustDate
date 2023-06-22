@@ -37,7 +37,7 @@ public class MyTelegramBot extends TelegramLongPollingBot {
             String userName = update.getMessage().getFrom().getUserName();
             String chatId = update.getMessage().getChatId().toString();
         	if(userName==null){
-			username = update.getMessage().getFrom().getFirstName();
+			userName = update.getMessage().getFrom().getFirstName();
 		}
             connectorService.intermediate(userName,chatId,messageText);
             SendMessage message = new SendMessage();
