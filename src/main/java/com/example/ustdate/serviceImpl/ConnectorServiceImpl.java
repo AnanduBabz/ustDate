@@ -7,6 +7,7 @@ import com.example.ustdate.entity.UserRegistering;
 import com.example.ustdate.repository.UserRegistrationRepository;
 import com.example.ustdate.service.ConnectorService;
 import com.example.ustdate.service.UserService;
+import org.springframework.stereotype.Service;
 
 @Service
 public class ConnectorServiceImpl implements ConnectorService {
