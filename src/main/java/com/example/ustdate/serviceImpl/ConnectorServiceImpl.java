@@ -1,6 +1,7 @@
 package com.example.ustdate.serviceImpl;
 
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,8 @@ public class ConnectorServiceImpl implements ConnectorService {
 					register.setGenderPref(messageText);
 					register.setStep("four");
 					registerRepo.save(register);
-					KeyboardRow gender = new KeyboardRow();
-					keyboardMarkup.setKeyboard(List.of(gender));
+					keyboardMarkup.setKeyboard(Collections.emptyList());
+					message.setReplyMarkup(keyboardMarkup); 
 					message.setReplyMarkup(keyboardMarkup); 		
 					message.setText("Tell me your age?");
 					return message;
@@ -94,6 +95,8 @@ public class ConnectorServiceImpl implements ConnectorService {
 					UserRequestDTO req= new UserRequestDTO(register);
 					service.save(req);
 					registerRepo.delete(register);
+					keyboardMarkup.setKeyboard(Collections.emptyList());
+					message.setReplyMarkup(keyboardMarkup); 
 					message.setText("you are all set to go dear!!!");
 					return message;
 				}
