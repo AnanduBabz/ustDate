@@ -2,6 +2,7 @@ package com.example.ustdate.RequestDTO;
 
 import com.example.ustdate.entity.UserRegistering;
 
+import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,30 @@ public class UserRequestDTO {
 	private String gender;
 	
 	private String genderPref;
+	
+	@Column
+	private String age;
+	
+	@Column
+	private String agePref;
+	
+	
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getAgePref() {
+		return agePref;
+	}
+
+	public void setAgePref(String agePref) {
+		this.agePref = agePref;
+	}
 
 	public String getName() {
 		return name;
@@ -54,6 +79,8 @@ public class UserRequestDTO {
 		this.setGenderPref(register.getGenderPref());
 		this.setName(register.getName());
 		this.setPhoneNumber(register.getChatId());
+		this.setAge(register.getAge());
+		this.setAgePref(register.getAgePref());
 	}
 	
 	

@@ -35,7 +35,28 @@ public class User {
 	@Column
 	private String inChat;
 	
+	@Column
+	private String age;
 	
+	@Column
+	private String agePref;
+	
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getAgePref() {
+		return agePref;
+	}
+
+	public void setAgePref(String agePref) {
+		this.agePref = agePref;
+	}
 
 	public String getInChat() {
 		return inChat;

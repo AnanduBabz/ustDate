@@ -27,9 +27,33 @@ public class UserRegistering {
 	
 	@Column
 	private String genderPref;
+	
+	@Column
+	private String age;
+	
+	@Column
+	private String agePref;
 
 	@Column
 	private String step;
+	
+	
+
+	public String getAge() {
+		return age;
+	}
+
+	public void setAge(String age) {
+		this.age = age;
+	}
+
+	public String getAgePref() {
+		return agePref;
+	}
+
+	public void setAgePref(String agePref) {
+		this.agePref = agePref;
+	}
 
 	public String getStep() {
 		return step;

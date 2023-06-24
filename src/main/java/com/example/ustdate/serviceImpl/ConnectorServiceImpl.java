@@ -32,10 +32,6 @@ public class ConnectorServiceImpl implements ConnectorService {
 		SendMessage message = new SendMessage();
 		ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 		keyboardMarkup.setResizeKeyboard(true);
-		KeyboardRow gender = new KeyboardRow();
-		gender.add(new KeyboardButton("M"));
-		gender.add(new KeyboardButton("F"));
-		gender.add(new KeyboardButton("O"));
 		if(existUser) {
 			//on registration?
 		}else {
@@ -50,6 +46,10 @@ public class ConnectorServiceImpl implements ConnectorService {
 				if(register.getGender()==null&&register.getStep().equals("first")) {
 					register.setStep("second");
 					registerRepo.save(register);
+					KeyboardRow gender = new KeyboardRow();
+					gender.add(new KeyboardButton("M"));
+					gender.add(new KeyboardButton("F"));
+					gender.add(new KeyboardButton("O"));
 					keyboardMarkup.setKeyboard(List.of(gender));
 					message.setReplyMarkup(keyboardMarkup); 		
 					message.setText("Tell me your Gender : M/F?");
@@ -58,12 +58,39 @@ public class ConnectorServiceImpl implements ConnectorService {
 					register.setGender(messageText);
 					register.setStep("third");
 					registerRepo.save(register);
+					KeyboardRow gender = new KeyboardRow();
+					gender.add(new KeyboardButton("M"));
+					gender.add(new KeyboardButton("F"));
+					gender.add(new KeyboardButton("O"));
 					keyboardMarkup.setKeyboard(List.of(gender));
 					message.setReplyMarkup(keyboardMarkup); 		
 					message.setText("Tell me your Gender preference : M/F?");
 					return message;
-				}else {
+				}else if(register.getAge()==null&&register.getStep().equals("third")) {
 					register.setGenderPref(messageText);
+					register.setStep("four");
+					registerRepo.save(register);
+					KeyboardRow gender = new KeyboardRow();
+					keyboardMarkup.setKeyboard(List.of(gender));
+					message.setReplyMarkup(keyboardMarkup); 		
+					message.setText("Tell me your age?");
+					return message;
+				}else if(register.getAgePref()==null&&register.getStep().equals("four")) {
+					register.setAge(messageText);
+					register.setStep("five");
+					registerRepo.save(register);
+					KeyboardRow age = new KeyboardRow();
+					age.add(new KeyboardButton("18-20"));
+					age.add(new KeyboardButton("20-22"));
+					age.add(new KeyboardButton("22-25"));
+					age.add(new KeyboardButton("25-30"));
+					age.add(new KeyboardButton("30<"));
+					keyboardMarkup.setKeyboard(List.of(age));
+					message.setReplyMarkup(keyboardMarkup); 		
+					message.setText("Tell me your age prefernce range?");
+					return message;
+				}else {
+					register.setAgePref(messageText);
 					UserRequestDTO req= new UserRequestDTO(register);
 					service.save(req);
 					registerRepo.delete(register);
