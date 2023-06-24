@@ -64,7 +64,8 @@ public class ConnectorServiceImpl implements ConnectorService {
 					gender.add(new KeyboardButton("F"));
 					gender.add(new KeyboardButton("O"));
 					keyboardMarkup.setKeyboard(List.of(gender));
-					message.setReplyMarkup(keyboardMarkup); 		
+					message.setReplyMarkup(keyboardMarkup); 	
+					keyboardMarkup.setOneTimeKeyboard(true);
 					message.setText("Tell me your Gender preference : M/F?");
 					return message;
 				}else if(register.getAge()==null&&register.getStep().equals("third")) {
@@ -87,6 +88,7 @@ public class ConnectorServiceImpl implements ConnectorService {
 					age.add(new KeyboardButton("25-30"));
 					age.add(new KeyboardButton("30<"));
 					keyboardMarkup.setKeyboard(List.of(age));
+					keyboardMarkup.setOneTimeKeyboard(true);
 					message.setReplyMarkup(keyboardMarkup); 		
 					message.setText("Tell me your age prefernce range?");
 					return message;
