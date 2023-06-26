@@ -11,6 +11,7 @@ import com.example.ustdate.entity.UserRegistering;
 import com.example.ustdate.repository.UserRegistrationRepository;
 import com.example.ustdate.service.ConnectorService;
 import com.example.ustdate.service.UserService;
+import com.example.ustdate.controller.ChatController;
 import org.springframework.stereotype.Service;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,6 +28,9 @@ public class ConnectorServiceImpl implements ConnectorService {
 	@Autowired
 	UserRegistrationRepository registerRepo;
 
+	@Autowired
+	ChatController chatController;
+
 	@Override
 	public SendMessage intermediate(String userName,String chatId,String messageText) {
 		Boolean existUser = checkUser(userName);
@@ -34,7 +38,10 @@ public class ConnectorServiceImpl implements ConnectorService {
 		ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 		keyboardMarkup.setResizeKeyboard(true);
 		if(existUser) {
-			//Menu - new pair, chat .
+			chatController.chatSelect(service.getUserByUserName(userName).getId());
+			//need to check chat id is same or not for same users
+			message.setText("you are connected, start chatting");
+			return message;
 		}else {
 			if(!registerRepo.existsById(userName)) {
 				UserRegistering register = new UserRegistering();

@@ -12,13 +12,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.stereotype.Service;
 import com.example.ustdate.entity.ActiveChat;
 import com.example.ustdate.entity.User;
 import com.example.ustdate.repository.ActiveChatRepository;
 import com.example.ustdate.repository.UserRepository;
 
-@RequestMapping("chat")
-@RestController
+//@RequestMapping("chat")
+//@RestController
+@Service
 public class ChatController {
 	
 	@Autowired
@@ -27,8 +29,8 @@ public class ChatController {
 	@Autowired
 	ActiveChatRepository activeChatRepo;
 	
-	@GetMapping("/random/{id}")
-	public User chatSelect(@PathVariable Long id) {
+	//@GetMapping("/random/{id}")
+	public User chatSelect(Long id) {
 		User user = userRepo.findById(id).get();
 		user.setInChat("TRUE");
 		userRepo.save(user);
@@ -52,17 +54,16 @@ public class ChatController {
 		return outputUser;
 	}
 	
-	@GetMapping()
+	//@GetMapping()
 	public List<ActiveChat>all(){
 		return activeChatRepo.findAll();
 	}
 	
-	@PostMapping("/send/{id}")
-	public String send(@PathVariable Long id,@RequestBody String message) {
-		User user = userRepo.findById(id).get();
+	//@PostMapping("/send/{id}")
+	public String send(Long id) {
+		//User user = userRepo.findById(id).get();
 		ActiveChat chat =  activeChatRepo.findById(id).get();
-		//send message connected user phone number;
-		return null;
+		return chat.get().getChatId();
 	}
 
 }
