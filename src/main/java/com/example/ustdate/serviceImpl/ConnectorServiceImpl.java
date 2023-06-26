@@ -34,7 +34,7 @@ public class ConnectorServiceImpl implements ConnectorService {
 		ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 		keyboardMarkup.setResizeKeyboard(true);
 		if(existUser) {
-			//on registration?
+			//Menu - new pair, chat .
 		}else {
 			if(!registerRepo.existsById(userName)) {
 				UserRegistering register = new UserRegistering();
