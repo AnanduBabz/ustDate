@@ -63,7 +63,7 @@ public class ChatController {
 	public String send(Long id) {
 		//User user = userRepo.findById(id).get();
 		ActiveChat chat =  activeChatRepo.findById(id).get();
-		return chat.get().getChatId();
+		return chat.getChatId();
 	}
 
 }
