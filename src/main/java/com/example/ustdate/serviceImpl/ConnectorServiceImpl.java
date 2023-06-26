@@ -7,9 +7,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.ustdate.RequestDTO.UserRequestDTO;
+import com.example.ustdate.entity.Selection;
+import com.example.ustdate.entity.User;
 import com.example.ustdate.entity.UserRegistering;
+import com.example.ustdate.repository.SelectionRepository;
 import com.example.ustdate.repository.UserRegistrationRepository;
+import com.example.ustdate.repository.UserRepository;
+import com.example.ustdate.responseDTO.InterMediateResponseDTO;
 import com.example.ustdate.service.ConnectorService;
+import com.example.ustdate.service.MenuService;
 import com.example.ustdate.service.UserService;
 import com.example.ustdate.controller.ChatController;
 import org.springframework.stereotype.Service;
@@ -27,9 +33,18 @@ public class ConnectorServiceImpl implements ConnectorService {
 	
 	@Autowired
 	UserRegistrationRepository registerRepo;
+	
+	@Autowired
+	UserRepository userRepo;
 
 	@Autowired
 	ChatController chatController;
+	
+	@Autowired
+	SelectionRepository selectionRepository;
+	
+	@Autowired
+	MenuService menuService;
 
 	@Override
 	public SendMessage intermediate(String userName,String chatId,String messageText) {
@@ -38,9 +53,29 @@ public class ConnectorServiceImpl implements ConnectorService {
 		ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 		keyboardMarkup.setResizeKeyboard(true);
 		if(existUser) {
-			chatController.chatSelect(service.getUserByUserName(userName).getId());
-			//need to check chat id is same or not for same users
-			message.setText("you are connected, start chatting");
+			KeyboardRow menu = new KeyboardRow();
+			menu.add(new KeyboardButton("CHAT"));
+			menu.add(new KeyboardButton("SUGGESTION"));
+			menu.add(new KeyboardButton("NEWCHAT"));
+			keyboardMarkup.setKeyboard(List.of(menu));
+			message.setReplyMarkup(keyboardMarkup); 
+			InterMediateResponseDTO res = new InterMediateResponseDTO();
+			res.setChatId(chatId);
+			res.setMessage(messageText);
+			InterMediateResponseDTO ret = new InterMediateResponseDTO();
+			User user = userRepo.findAllByPhoneNumber(message.getChatId());
+			Selection sel = selectionRepository.findById(user.getId()).get();
+			if(message.equals("NEWCHAT")) {
+				ret = menuService.newChat(res);
+			}else if (message.equals("SUGGESTION")) {
+				ret = menuService.suggestion(res);
+			}else if (message.equals("CHAT")) {
+				ret = menuService.chat(res);
+			}else {
+				ret = menuService.chat(res);
+			}
+			message.setChatId(ret.getChatId());
+			message.setText(ret.getMessage());
 			return message;
 		}else {
 			if(!registerRepo.existsById(userName)) {
