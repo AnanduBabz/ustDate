@@ -113,7 +113,6 @@ public class ConnectorServiceImpl implements ConnectorService {
 			message.setText("Hi Welcome to Kazhakoottam dating , let me know your details and intrest");
 			return message;
 		}
-		return null;
 	}
 
 	private Boolean checkUser(String userName) {
