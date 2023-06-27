@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.example.ustdate.RequestDTO.MessengerDTO;
 import com.example.ustdate.RequestDTO.UserRequestDTO;
+import com.example.ustdate.botConfiguration.MyTelegramBot;
 import com.example.ustdate.entity.Selection;
 import com.example.ustdate.entity.User;
 import com.example.ustdate.entity.UserRegistering;
@@ -18,6 +20,8 @@ import com.example.ustdate.service.ConnectorService;
 import com.example.ustdate.service.MenuService;
 import com.example.ustdate.service.UserService;
 import com.example.ustdate.controller.ChatController;
+import com.example.ustdate.controller.LogicServiceController;
+
 import org.springframework.stereotype.Service;
 
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -27,6 +31,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 @Service
 public class ConnectorServiceImpl implements ConnectorService {
+	
+	@Autowired
+	LogicServiceController logic;
 	
 	@Autowired
 	UserService service;
@@ -54,28 +61,17 @@ public class ConnectorServiceImpl implements ConnectorService {
 		keyboardMarkup.setResizeKeyboard(true);
 		if(existUser) {
 			KeyboardRow menu = new KeyboardRow();
-			menu.add(new KeyboardButton("CHAT"));
-			menu.add(new KeyboardButton("SUGGESTION"));
 			menu.add(new KeyboardButton("NEWCHAT"));
 			keyboardMarkup.setKeyboard(List.of(menu));
 			message.setReplyMarkup(keyboardMarkup); 
-			InterMediateResponseDTO res = new InterMediateResponseDTO();
-			res.setChatId(chatId);
-			res.setMessage(messageText);
-			InterMediateResponseDTO ret = new InterMediateResponseDTO();
-			User user = userRepo.findAllByPhoneNumber(message.getChatId());
-			Selection sel = selectionRepository.findById(user.getId()).get();
-			if(message.equals("NEWCHAT")) {
-				ret = menuService.newChat(res);
-			}else if (message.equals("SUGGESTION")) {
-				ret = menuService.suggestion(res);
-			}else if (message.equals("CHAT")) {
-				ret = menuService.chat(res);
-			}else {
-				ret = menuService.chat(res);
-			}
-			message.setChatId(ret.getChatId());
-			message.setText(ret.getMessage());
+			MessengerDTO mess = logic.channel(userName, chatId, messageText);
+			MyTelegramBot bot = new MyTelegramBot();
+			SendMessage messageToSend = new SendMessage();
+			messageToSend.setChatId(mess.getToChatId());
+			messageToSend.setText(mess.getToMessage());
+			message.setChatId(mess.getFromChatId());
+			message.setText(mess.getFromMessage());
+			bot.immediateMessage(messageToSend);
 			return message;
 		}else {
 			if(!registerRepo.existsById(userName)) {

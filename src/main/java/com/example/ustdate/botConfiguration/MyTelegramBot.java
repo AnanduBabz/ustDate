@@ -14,50 +14,57 @@ public class MyTelegramBot extends TelegramLongPollingBot {
 
 	@Autowired
 	ConnectorService connectorService;
-	
-    public static void main(String[] args) {
-        MyTelegramBot bot = new MyTelegramBot();
-        bot.runBot();
-    }
 
-    private void runBot() {
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(this);
-            System.out.println("Bot has started successfully.");
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
+	public static void main(String[] args) {
+		MyTelegramBot bot = new MyTelegramBot();
+		bot.runBot();
+	}
 
-    @Override
-    public void onUpdateReceived(Update update) {
-        if (update.hasMessage() && update.getMessage().hasText()) {
-            String messageText = update.getMessage().getText();
-            String userName = update.getMessage().getFrom().getUserName();
-            String chatId = update.getMessage().getChatId().toString();
-        	if(userName==null){
-			userName = update.getMessage().getFrom().getFirstName();
+	private void runBot() {
+		try {
+			TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+			botsApi.registerBot(this);
+			System.out.println("Bot has started successfully.");
+		} catch (TelegramApiException e) {
+			e.printStackTrace();
 		}
-            SendMessage message = connectorService.intermediate(userName,chatId,messageText);
-            message.setChatId(chatId);
-            try {
-                execute(message); // Sending our message object to user
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
-    } 
+	}
 
-    @Override
-    public String getBotUsername() {
-        return "KazhakoottamDatingbot";
-    }
-    
-    @Override
-    public String getBotToken() {
-        return "6050477286:AAFMYsYDktUj8SEhq3L9Cx0sqV_Rq0D_JmY";
-    }
-    
-    
+	@Override
+	public void onUpdateReceived(Update update) {
+		if (update.hasMessage() && update.getMessage().hasText()) {
+			String messageText = update.getMessage().getText();
+			String userName = update.getMessage().getFrom().getUserName();
+			String chatId = update.getMessage().getChatId().toString();
+			if (userName == null) {
+				userName = update.getMessage().getFrom().getFirstName();
+			}
+			SendMessage message = connectorService.intermediate(userName, chatId, messageText);
+			message.setChatId(chatId);
+			try {
+				execute(message); // Sending our message object to user
+			} catch (TelegramApiException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void immediateMessage(SendMessage message) {
+		try {
+			execute(message); 
+		} catch (TelegramApiException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public String getBotUsername() {
+		return "KazhakoottamDatingbot";
+	}
+
+	@Override
+	public String getBotToken() {
+		return "6050477286:AAFMYsYDktUj8SEhq3L9Cx0sqV_Rq0D_JmY";
+	}
+
 }
