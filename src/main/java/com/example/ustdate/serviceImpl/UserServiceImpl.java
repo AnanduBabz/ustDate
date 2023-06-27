@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 		BeanUtils.copyProperties(user, newUser);
 		newUser = userRepo.save(newUser);
 		ActiveChat chat = new ActiveChat();
-//		chat = chat.newChat(newUser.getId());
+		chat = chat.newChat(newUser.getId());
 		activeChatRepository.save(chat);
 		return newUser;
 	}
