@@ -71,7 +71,9 @@ public class ConnectorServiceImpl implements ConnectorService {
 			messageToSend.setText(mess.getToMessage());
 			message.setChatId(mess.getFromChatId());
 			message.setText(mess.getFromMessage());
-			bot.immediateMessage(messageToSend);
+			if(mess.getTo()!=null) {
+				bot.immediateMessage(messageToSend);
+			}
 			return message;
 		}else {
 			if(!registerRepo.existsById(userName)) {

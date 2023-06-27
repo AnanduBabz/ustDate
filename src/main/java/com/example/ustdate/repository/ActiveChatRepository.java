@@ -8,4 +8,6 @@ import com.example.ustdate.entity.ActiveChat;
 @Repository
 public interface ActiveChatRepository extends JpaRepository<ActiveChat, Long> {
 
+	ActiveChat findByConnectedChatId(String phoneNumber);
+
 }
