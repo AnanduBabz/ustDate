@@ -42,11 +42,11 @@ public class MenuServiceImpl implements MenuService {
 		User connectedUser= userRepo.findById(randomId).get();
 		ActiveChat chat = new ActiveChat();
 		chat.setUserId(randomId);
-		chat.setChatId(user.getPhoneNumber());
+//		chat.setChatId(user.getPhoneNumber());
 		activeChatRepo.save(chat);
 		ActiveChat chat2 = new ActiveChat();
 		chat2.setUserId(user.getId());
-		chat2.setChatId(connectedUser.getPhoneNumber());
+//		chat2.setChatId(connectedUser.getPhoneNumber());
 		activeChatRepo.save(chat2);
 		message.setMessage("Connected");
 		//send notification to connected user also
@@ -57,7 +57,7 @@ public class MenuServiceImpl implements MenuService {
 	public InterMediateResponseDTO chat(InterMediateResponseDTO message) {
 		User user = userRepo.findAllByPhoneNumber(message.getChatId());
 		ActiveChat chat = activeChatRepo.findById(user.getId()).get();
-		message.setChatId(chat.getChatId());
+//		message.setChatId(chat.getChatId());
 		return message;
 	}
 

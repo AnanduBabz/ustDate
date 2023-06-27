@@ -43,13 +43,13 @@ public class ChatController {
 		 Random rand = new Random();
 		 Long randomId = ids.get(rand.nextInt(ids.size()));
 		 User outputUser = userRepo.findById(randomId).get();
-		 ActiveChat chat =  activeChatRepo.findById(id).get();
-		 chat.setConnectedUserId(randomId);
-		 ActiveChat chat2 =  activeChatRepo.findById(randomId).get();
-		 chat2.setConnectedUserId(id);
-		 chat2.setChatId(chat.getChatId());
-		 activeChatRepo.save(chat);
-		 activeChatRepo.save(chat2);
+//		 ActiveChat chat =  activeChatRepo.findById(id).get();
+//		 chat.setConnectedUserId(randomId);
+//		 ActiveChat chat2 =  activeChatRepo.findById(randomId).get();
+//		 chat2.setConnectedUserId(id);
+//		 chat2.setChatId(chat.getChatId());
+//		 activeChatRepo.save(chat);
+//		 activeChatRepo.save(chat2);
 		 //save to connected account table
 		return outputUser;
 	}
@@ -63,7 +63,7 @@ public class ChatController {
 	public String send(Long id) {
 		//User user = userRepo.findById(id).get();
 		ActiveChat chat =  activeChatRepo.findById(id).get();
-		return chat.getChatId();
+		return chat.getConnectedChatId();
 	}
 
 }

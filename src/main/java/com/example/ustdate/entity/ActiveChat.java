@@ -14,19 +14,7 @@ public class ActiveChat {
 	private Long userId;
 	
 	@Column
-	private Long connectedUserId;
-	
-	@Column
-	private String chatId;
-
-	
-	public String getChatId() {
-		return chatId;
-	}
-
-	public void setChatId(String chatId) {
-		this.chatId = chatId;
-	}
+	private String connectedChatId;
 
 	public Long getUserId() {
 		return userId;
@@ -36,12 +24,12 @@ public class ActiveChat {
 		this.userId = userId;
 	}
 
-	public Long getConnectedUserId() {
-		return connectedUserId;
+	public String getConnectedChatId() {
+		return connectedChatId;
 	}
 
-	public void setConnectedUserId(Long connectedUserId) {
-		this.connectedUserId = connectedUserId;
+	public void setConnectedChatId(String connectedChatId) {
+		this.connectedChatId = connectedChatId;
 	}
 	
 	public ActiveChat newChat(Long userId){

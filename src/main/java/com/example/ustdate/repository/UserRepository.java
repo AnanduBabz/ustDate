@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	User findAllByPhoneNumber(String chatId);
 
+	User findByPhoneNumber(String connectedChatId);
+
 }
