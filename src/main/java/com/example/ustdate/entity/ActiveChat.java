@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
-@Table
+@Table(name = "active_chat")
 @Entity
 public class ActiveChat {
 

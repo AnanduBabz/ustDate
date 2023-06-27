@@ -42,6 +42,14 @@ public class LogicServiceController {
 		reply.setTo(connectedUser.getId());
 		reply.setToChatId(connectedUser.getPhoneNumber());
 		reply.setToMessage("connected to new chat");
+		ActiveChat chat= new ActiveChat();
+		chat.setUserId(user.getId());
+		chat.setConnectedChatId(connectedUser.getPhoneNumber());
+		ActiveChat chat2= new ActiveChat();
+		chat2.setUserId(connectedUser.getId());
+		chat2.setConnectedChatId(user.getPhoneNumber());
+		activeChatRepo.save(chat);
+		activeChatRepo.save(chat2);
 		return reply;
 	}
 
