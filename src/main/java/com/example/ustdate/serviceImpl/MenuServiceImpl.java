@@ -32,7 +32,7 @@ public class MenuServiceImpl implements MenuService {
 	@Override
 	public InterMediateResponseDTO newChat(InterMediateResponseDTO message) {
 		User user = userRepo.findAllByPhoneNumber(message.getChatId());
-		List<User> sortedUsers = userRepo.findByGenderAndInChat(user.getGenderPref(), "FALSE");
+		List<User> sortedUsers = userRepo.findByGenderAndInChat(user.getGenderPref(), false);
 		List<Long> ids = new ArrayList<>();
 		for (User use : sortedUsers) {
 			ids.add(use.getId());

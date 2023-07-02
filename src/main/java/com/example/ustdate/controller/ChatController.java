@@ -65,5 +65,7 @@ public class ChatController {
 		ActiveChat chat =  activeChatRepo.findById(id).get();
 		return chat.getConnectedChatId();
 	}
+	
+	
 
 }
