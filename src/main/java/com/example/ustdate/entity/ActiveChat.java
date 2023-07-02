@@ -35,6 +35,7 @@ public class ActiveChat {
 	public ActiveChat newChat(Long userId){
 		ActiveChat chat = new ActiveChat();
 		chat.setUserId(userId);
+		chat.setConnectedChatId("1280533615");
 		return chat;
 	}
 	
