@@ -29,30 +29,30 @@ public class ChatController {
 	@Autowired
 	ActiveChatRepository activeChatRepo;
 	
-	//@GetMapping("/random/{id}")
-	public User chatSelect(Long id) {
-		User user = userRepo.findById(id).get();
-		user.setInChat("TRUE");
-		userRepo.save(user);
-		List<User> sortedUsers = userRepo.findByGenderAndInChat(user.getGenderPref(),"FALSE");
-		//filter from connected account table also
-		List<Long>ids = new ArrayList<>();
-		for(User use:sortedUsers) {
-			ids.add(use.getId());
-		}
-		 Random rand = new Random();
-		 Long randomId = ids.get(rand.nextInt(ids.size()));
-		 User outputUser = userRepo.findById(randomId).get();
-//		 ActiveChat chat =  activeChatRepo.findById(id).get();
-//		 chat.setConnectedUserId(randomId);
-//		 ActiveChat chat2 =  activeChatRepo.findById(randomId).get();
-//		 chat2.setConnectedUserId(id);
-//		 chat2.setChatId(chat.getChatId());
-//		 activeChatRepo.save(chat);
-//		 activeChatRepo.save(chat2);
-		 //save to connected account table
-		return outputUser;
-	}
+//	//@GetMapping("/random/{id}")
+//	public User chatSelect(Long id) {
+//		User user = userRepo.findById(id).get();
+////		user.setInChat("TRUE");
+////		userRepo.save(user);
+////		List<User> sortedUsers = userRepo.findByGenderAndInChat(user.getGenderPref(),"FALSE");
+//		//filter from connected account table also
+//		List<Long>ids = new ArrayList<>();
+//		for(User use:sortedUsers) {
+//			ids.add(use.getId());
+//		}
+//		 Random rand = new Random();
+//		 Long randomId = ids.get(rand.nextInt(ids.size()));
+//		 User outputUser = userRepo.findById(randomId).get();
+////		 ActiveChat chat =  activeChatRepo.findById(id).get();
+////		 chat.setConnectedUserId(randomId);
+////		 ActiveChat chat2 =  activeChatRepo.findById(randomId).get();
+////		 chat2.setConnectedUserId(id);
+////		 chat2.setChatId(chat.getChatId());
+////		 activeChatRepo.save(chat);
+////		 activeChatRepo.save(chat2);
+//		 //save to connected account table
+//		return outputUser;
+//	}
 	
 	//@GetMapping()
 	public List<ActiveChat>all(){
