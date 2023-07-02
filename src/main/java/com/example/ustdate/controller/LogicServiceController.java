@@ -2,6 +2,7 @@ package com.example.ustdate.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import com.example.ustdate.RequestDTO.MessengerDTO;
 import com.example.ustdate.botConfiguration.MyTelegramBot;
 import com.example.ustdate.entity.ActiveChat;
+import com.example.ustdate.entity.PreviousSelection;
 import com.example.ustdate.entity.User;
 import com.example.ustdate.repository.ActiveChatRepository;
+import com.example.ustdate.repository.PreviousSelectionRepository;
 import com.example.ustdate.repository.UserRepository;
 
 @Service
@@ -23,12 +26,15 @@ public class LogicServiceController {
 
 	@Autowired
 	ActiveChatRepository activeChatRepo;
+	
+	@Autowired
+	PreviousSelectionRepository previousSelectionRepo;
 
 	public MessengerDTO channel(String userName, String chatId, String messageText) {
 		MessengerDTO reply = new MessengerDTO();
 		if (messageText.equals("NEWCHAT")) {
 			reply = randomId(userName, chatId);
-		} else {
+		}else {
 			reply = sendChatGenerator(userName, chatId, messageText);
 		}
 		return reply;
@@ -36,12 +42,14 @@ public class LogicServiceController {
 
 	private MessengerDTO randomId(String userName, String chatId) {
 		User user = getUserId(userName);
+		ActiveChat connectedChat = activeChatRepo.findByConnectedChatId(chatId);
 		removeExistingChat(user.getId());
 		MessengerDTO reply = new MessengerDTO();
 		reply.setFrom(user.getId());
 		reply.setFromChatId(user.getPhoneNumber());
 		reply.setFromMessage("connected to new chat");
 		User connectedUser = getRandomUser(user);
+		changeActiveChatStatus(connectedChat.getUserId());
 		if(connectedUser==null) {
 			reply.setFromMessage("Sorry no match is free as of now!!!");
 			return reply;
@@ -63,14 +71,21 @@ public class LogicServiceController {
 	private void removeExistingChat(Long userId) {
 		MyTelegramBot bot = new MyTelegramBot();
 		ActiveChat chat = activeChatRepo.findById(userId).get();
-		SendMessage message = new SendMessage();
-		message.setChatId(chat.getConnectedChatId());
-		message.setText("you have been removed from current chat");
-		bot.immediateMessage(message);
+		sendMessage(chat.getConnectedChatId(),"you have been removed from current chat");
+		chat.setConnectedChatId(null);
+		activeChatRepo.save(chat);
+	}
+	
+	private void sendMessage(String chatId,String message) {
+		MyTelegramBot bot = new MyTelegramBot();
+		SendMessage mess = new SendMessage();
+		mess.setChatId(chatId);
+		mess.setText(message);
+		bot.immediateMessage(mess);
 	}
 
 	private User getRandomUser(User user) {
-		List<User> sortedUsers = userRepo.findByGender(user.getGenderPref());
+		List<User> sortedUsers = userRepo.findByGenderAndInChat(user.getGenderPref(),false);
 		if(sortedUsers.isEmpty()) {
 			return null;
 		}
@@ -80,7 +95,10 @@ public class LogicServiceController {
 		}
 		Random rand = new Random();
 		Long randomId = ids.get(rand.nextInt(ids.size()));
-		return userRepo.findById(randomId).get();
+		User randomUser = userRepo.findById(randomId).get();
+		randomUser.setInChat(true);
+		userRepo.save(randomUser);
+		return randomUser;
 	}
 
 	private MessengerDTO sendChatGenerator(String userName, String chatId, String messageText) {
@@ -90,7 +108,7 @@ public class LogicServiceController {
 		if(chat.getConnectedChatId().isEmpty()||chat.getConnectedChatId()!=null) {
 			reply.setFrom(user.getId());
 			reply.setFromChatId(user.getPhoneNumber());
-			reply.setFromMessage(">>");
+			reply.setFromMessage("message delivered...");
 			User connectedUser = getConnectedUser(user.getId());
 			reply.setTo(connectedUser.getId());
 			reply.setToChatId(connectedUser.getPhoneNumber());
@@ -109,4 +127,13 @@ public class LogicServiceController {
 	private User getUserId(String userName) {
 		return userRepo.findByName(userName).get();
 	}
+	
+	private void changeActiveChatStatus(Long userId) {
+		Optional<User> user= userRepo.findById(userId);
+		if(user.isPresent()) {
+			user.get().setInChat(user.get().getInChat()?false:true);
+			userRepo.save(user.get());
+		}
+	}
+	
 }

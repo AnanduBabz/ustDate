@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 	public User save(UserRequestDTO user) {
 		User newUser = new User();
 		BeanUtils.copyProperties(user, newUser);
+		newUser.setInChat(false);
 		newUser = userRepo.save(newUser);
 		ActiveChat chat = new ActiveChat();
 		chat = chat.newChat(newUser.getId());

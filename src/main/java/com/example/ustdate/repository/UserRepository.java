@@ -13,7 +13,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	List<User> findByGender(String genderPref);
 
-	List<User> findByGenderAndInChat(String genderPref, String string);
+	List<User> findByGenderAndInChat(String genderPref, boolean string);
 
 	Optional<User> findByName(String name);
 

@@ -33,7 +33,7 @@ public class User {
 	private String genderPref;
 	
 	@Column
-	private String inChat;
+	private Boolean inChat;
 	
 	@Column
 	private String age;
@@ -56,13 +56,13 @@ public class User {
 
 	public void setAgePref(String agePref) {
 		this.agePref = agePref;
-	}
+	}	
 
-	public String getInChat() {
+	public Boolean getInChat() {
 		return inChat;
 	}
 
-	public void setInChat(String inChat) {
+	public void setInChat(Boolean inChat) {
 		this.inChat = inChat;
 	}
 

@@ -21,6 +21,7 @@ public class UstdateApplication {
     public MyTelegramBot myTelegramBot() throws TelegramApiException {
         TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
         MyTelegramBot bot = new MyTelegramBot();
+        bot.clearWebhook(); // Clear the old webhook
         botsApi.registerBot(bot);
         return bot;
     }

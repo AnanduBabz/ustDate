@@ -62,6 +62,7 @@ public class ConnectorServiceImpl implements ConnectorService {
 		if(existUser) {
 			KeyboardRow menu = new KeyboardRow();
 			menu.add(new KeyboardButton("NEWCHAT"));
+			menu.add(new KeyboardButton("INVITE_YOUR_CRUSH"));
 			keyboardMarkup.setKeyboard(List.of(menu));
 			message.setReplyMarkup(keyboardMarkup); 
 			MessengerDTO mess = logic.channel(userName, chatId, messageText);
@@ -153,6 +154,14 @@ public class ConnectorServiceImpl implements ConnectorService {
 			return true;
 		}
 		return false;
+	}
+	
+	private void sendMessage(String chatId,String message) {
+		MyTelegramBot bot = new MyTelegramBot();
+		SendMessage mess = new SendMessage();
+		mess.setChatId(chatId);
+		mess.setText(message);
+		bot.immediateMessage(mess);
 	}
 
 }
